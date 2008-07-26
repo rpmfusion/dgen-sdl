@@ -1,0 +1,92 @@
+--- dgen-1.23.orig/romload.c
++++ dgen-1.23/romload.c
+@@ -7,6 +7,10 @@
+ #include <string.h>
+ #include <time.h>
+ #include <unistd.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <sys/wait.h>
+ 
+ static int load_bin_into(char *name,unsigned char *into)
+ {
+@@ -126,13 +130,32 @@
+      (magicbuf[0] == 037 && magicbuf[1] == 0240) || /* LZH        (?)      */
+      (magicbuf[0] == 'P' && magicbuf[1] == 'K'))    /* ZIP        (.zip ;) */
+     {
+-      char temp[0x100], temp2[0x80];
+-      srand(time(NULL));
++      char temp[0x100], *temp2;
++      int f;
+       /* Run it through gzip (I know this is cheap ;) */
+-      sprintf(temp2, "/tmp/dgenrom_%d_%d", rand(), rand());
+-      sprintf(temp, "gzip -S \"\" -cdq %s > %s", name, temp2);
+-      /* If gzip returned an error, stop */
+-      if(system(temp)) { remove(temp2); return -1; };
++      asprintf(&temp2, "/tmp/dgenrom_XXXXXX");
++      f = mkstemp(temp2);
++      if (f == -1) {
++	      perror("mkstemp");
++	      return -1;
++      }
++      close(f);
++      
++      f = open(name, O_RDONLY);
++      if (f == -1) {
++	      perror("open");
++	      return -1;
++      }
++      if (dup2(f, 0) == -1) {
++	      perror("dup2");
++	      return -1;
++      }
++      sprintf(temp, "zcat > %s", temp2);
++      if (system(temp)) {
++	      perror("system");
++	      return -1;
++      }
++      
+       /* Recurse with the new file */
+       len = load_rom_into(temp2, into);
+       remove(temp2);
+@@ -142,14 +165,32 @@
+   /* Do bzip2 also */
+   if(magicbuf[0] == 'B' && magicbuf[1] == 'Z' && magicbuf[2] == 'h')
+     {
++      char temp[0x100], *temp2;
++      int f;
+       /* Damn, this looks almost like the gzip stuff above. *lol* :) */
+-      char temp[0x100], temp2[0x80];
+-      srand(time(NULL));
+-      /* Go through bzip2 */
+-      sprintf(temp2, "/tmp/dgenrom_%d_%d", rand(), rand());
+-      sprintf(temp, "bzip2 -cd %s > %s", name, temp2);
+-      /* If we got an error, stop */
+-      if(system(temp)) { remove(temp2); return -1; };
++      asprintf(&temp2, "/tmp/dgenrom_XXXXXX");
++      f = mkstemp(temp2);
++      if (f == -1) {
++	      perror("mkstemp");
++	      return -1;
++      }
++      close(f);
++      
++      f = open(name, O_RDONLY);
++      if (f == -1) {
++	      perror("open");
++	      return -1;
++      }
++      if (dup2(f, 0) == -1) {
++	      perror("dup2");
++	      return -1;
++      }
++      sprintf(temp, "bzcat > %s", temp2);
++      if (system(temp)) {
++	      perror("system");
++	      return -1;
++      }
++      
+       /* Recurse with the uncompressed file */
+       len = load_rom_into(temp2, into);
+       remove(temp2);
