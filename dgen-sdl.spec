@@ -1,16 +1,17 @@
 Summary: DGen/SDL is a Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
 Version: 1.23
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: BSD
 Group: Applications/Emulators
-URL: http://pknet.com/~joe/dgen-sdl.html 
-Source: http://pknet.com/~joe/%{name}-%{version}.tar.gz
+URL: http://tamentis.net/projects/dgen/
+Source: http://tamentis.net/projects/dgen/files/%{name}-%{version}.tar.gz
 Patch0: dgen-sdl-1.23-gcc4.patch
 Patch1: dgen-sdl-1.23-gcc34.patch
 Patch2: dgen-sdl-1.23-man_warning.patch
 Patch3: dgen-sdl-1.23-gzip_security_hole.patch
 Patch4: dgen-sdl-1.23-command_line.patch
+Patch5: dgen-sdl-1.23-execstack.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: SDL-devel >= 1.0.0
 %ifarch %{ix86}
@@ -30,6 +31,7 @@ accurate audio and video.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 sed -i 's/\r//' mz80/mz80.txt
 
 %build
@@ -60,6 +62,10 @@ rm -rf %{buildroot}
 %doc docs/mz80 docs/star
 
 %changelog
+* Wed Aug 06 2008 Andrea Musuruane <musuruan@gmail.com> 1.23-4
+- added a patch not to require an executable stack
+- new upstream developer - updated URL and Source tags
+
 * Mon Nov 26 2007 Andrea Musuruane <musuruan@gmail.com> 1.23-3
 - removed %%{?dist} tag from changelog
 - removed %%{?_smp_mflags} from make invocation

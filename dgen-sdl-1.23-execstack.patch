@@ -1,0 +1,54 @@
+diff -dur dgen-sdl-1.23/asm_tiles.asmu dgen-sdl-1.23-execstack/asm_tiles.asmu
+--- dgen-sdl-1.23/asm_tiles.asmu	1999-12-22 02:56:08.000000000 +0100
++++ dgen-sdl-1.23-execstack/asm_tiles.asmu	2008-08-05 00:13:34.000000000 +0200
+@@ -1088,3 +1088,6 @@
+ 	__highpal	dd 0
+ 
+ ; ----------------------------------------
++
++section .note.GNU-stack noalloc noexec nowrite progbits
++
+diff -dur dgen-sdl-1.23/ctv.asmu dgen-sdl-1.23-execstack/ctv.asmu
+--- dgen-sdl-1.23/ctv.asmu	1999-12-20 04:15:55.000000000 +0100
++++ dgen-sdl-1.23-execstack/ctv.asmu	2008-08-05 00:13:34.000000000 +0200
+@@ -162,3 +162,6 @@
+ pop  edi
+ xor eax,eax
+ ret
++
++section .note.GNU-stack noalloc noexec nowrite progbits
++
+diff -dur dgen-sdl-1.23/mmx_memcpy.asmu dgen-sdl-1.23-execstack/mmx_memcpy.asmu
+--- dgen-sdl-1.23/mmx_memcpy.asmu	1999-12-20 04:15:57.000000000 +0100
++++ dgen-sdl-1.23-execstack/mmx_memcpy.asmu	2008-08-05 00:13:34.000000000 +0200
+@@ -40,3 +40,6 @@
+ ret
+ 
+ ; --------------------------------------
++
++section .note.GNU-stack noalloc noexec nowrite progbits
++
+diff -dur dgen-sdl-1.23/mz80/makez80.c dgen-sdl-1.23-execstack/mz80/makez80.c
+--- dgen-sdl-1.23/mz80/makez80.c	2000-03-19 02:05:40.000000000 +0100
++++ dgen-sdl-1.23-execstack/mz80/makez80.c	2008-08-05 00:18:27.000000000 +0200
+@@ -7104,6 +7104,8 @@
+ 	if (MZ80_ASSEMBLY_X86 == bWhat)
+ 	{
+ 		fprintf(fp, "		end\n");
++                fprintf(fp, "\n");
++                fprintf(fp, "section .note.GNU-stack noalloc noexec nowrite progbits\n");
+ 	}
+ 	else
+ 	if (MZ80_C == bWhat)
+diff -dur dgen-sdl-1.23/star/star.c dgen-sdl-1.23-execstack/star/star.c
+--- dgen-sdl-1.23/star/star.c	1999-12-20 07:19:04.000000000 +0100
++++ dgen-sdl-1.23-execstack/star/star.c	2008-08-05 00:13:40.000000000 +0200
+@@ -2414,6 +2414,8 @@
+ */
+ static void suffixes(void) {
+ 	emit("end\n");
++        emit("\n");
++        emit("section .note.GNU-stack noalloc noexec nowrite progbits\n");
+ }
+ 
+ /****************************************************************************
