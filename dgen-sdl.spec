@@ -1,7 +1,7 @@
 Summary: DGen/SDL is a Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
 Version: 1.23
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: BSD
 Group: Applications/Emulators
 URL: http://tamentis.net/projects/dgen/
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %doc docs/mz80 docs/star
 
 %changelog
+* Sun Mar 29 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 1.23-5
+- rebuild for new F11 features
+
 * Wed Aug 06 2008 Andrea Musuruane <musuruan@gmail.com> 1.23-4
 - added a patch not to require an executable stack
 - new upstream developer - updated URL and Source tags
