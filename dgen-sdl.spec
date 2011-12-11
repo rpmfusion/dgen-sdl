@@ -1,38 +1,41 @@
-Summary: DGen/SDL is a Sega Genesis (MegaDrive outside the US) emulator
+Summary: A Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
-Version: 1.23
-Release: 5%{?dist}
+Version: 1.28
+Release: 1%{?dist}
 License: BSD
 Group: Applications/Emulators
-URL: http://tamentis.net/projects/dgen/
-Source: http://tamentis.net/projects/dgen/files/%{name}-%{version}.tar.gz
-Patch0: dgen-sdl-1.23-gcc4.patch
-Patch1: dgen-sdl-1.23-gcc34.patch
-Patch2: dgen-sdl-1.23-man_warning.patch
-Patch3: dgen-sdl-1.23-gzip_security_hole.patch
-Patch4: dgen-sdl-1.23-command_line.patch
-Patch5: dgen-sdl-1.23-execstack.patch
+URL: http://dgen.sourceforge.net/
+Source: http://downloads.sourceforge.net/dgen/%{name}-%{version}.tar.gz
+# Fix man page warnings
+# http://sourceforge.net/tracker/?func=detail&aid=3455451&group_id=227519&atid=1070824
+Patch0: dgen-sdl-1.28-man_warning.patch
+# Fix not to require an executable stack
+# http://sourceforge.net/tracker/?func=detail&aid=3457405&group_id=227519&atid=1070824
+Patch1: dgen-sdl-1.28-execstack.patch 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: SDL-devel >= 1.0.0
+BuildRequires: libarchive-devel
 %ifarch %{ix86}
 BuildRequires: nasm
 %endif
 
 %description
-DGen/SDL is a semi-fantastic emulator for Unix-esque operating systems
-supported by SDL library. It produces a virtual environment in which 
-Sega Genesis (MegaDrive outside the US) games may run with fairly 
-accurate audio and video.
+DGen/SDL is an emulator for the Sega Genesis/MegaDrive game console. It 
+supports save states, full screen mode, interlace mode, Game Genie, joystick, 
+compressed ROM images, and more. 
 
 %prep
 %setup -q
-%patch0 -p0
-%patch1 -p0
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-sed -i 's/\r//' mz80/mz80.txt
+%patch0 -p1
+%patch1 -p1
+
+# Fix file encoding
+for txtfile in cz80/readme.txt
+do
+    iconv --from=ISO-8859-1 --to=UTF-8 $txtfile > tmp
+    touch -r $txtfile tmp
+    mv tmp $txtfile
+done
 
 %build
 %configure
@@ -43,6 +46,11 @@ make
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 mkdir docs
+mkdir docs/cz80
+cp -a cz80/readme.txt docs/cz80
+mkdir docs/musa
+cp -a musa/readme.txt docs/musa
+cp -a musa/history.txt docs/musa
 mkdir docs/mz80
 cp -a mz80/mz80.txt docs/mz80
 mkdir docs/star
@@ -54,14 +62,21 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %{_bindir}/dgen
-%{_bindir}/tobin
+%{_bindir}/dgen_tobin
 %{_mandir}/man1/dgen.1*
-%{_mandir}/man1/tobin.1*
+%{_mandir}/man1/dgen_tobin.1*
 %{_mandir}/man5/dgenrc.5*
 %doc AUTHORS ChangeLog COPYING README sample.dgenrc
-%doc docs/mz80 docs/star
+%doc docs/cz80 docs/musa docs/mz80 docs/star
 
 %changelog
+* Sun Dec 11 2011 Andrea Musuruane <musuruan@gmail.com> 1.28-1
+- updated to new upstream version
+- updated URL and Source tags
+- updated summary and description
+- dropped no longer needed patches
+- submitted patches upstream
+
 * Sun Mar 29 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 1.23-5
 - rebuild for new F11 features
 
