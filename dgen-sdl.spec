@@ -1,17 +1,11 @@
 Summary: A Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
-Version: 1.28
+Version: 1.29
 Release: 1%{?dist}
 License: BSD
 Group: Applications/Emulators
 URL: http://dgen.sourceforge.net/
 Source: http://downloads.sourceforge.net/dgen/%{name}-%{version}.tar.gz
-# Fix man page warnings
-# http://sourceforge.net/tracker/?func=detail&aid=3455451&group_id=227519&atid=1070824
-Patch0: dgen-sdl-1.28-man_warning.patch
-# Fix not to require an executable stack
-# http://sourceforge.net/tracker/?func=detail&aid=3457405&group_id=227519&atid=1070824
-Patch1: dgen-sdl-1.28-execstack.patch 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: SDL-devel >= 1.0.0
 BuildRequires: libarchive-devel
@@ -26,8 +20,6 @@ compressed ROM images, and more.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
 
 # Fix file encoding
 for txtfile in cz80/readme.txt
@@ -70,6 +62,9 @@ rm -rf %{buildroot}
 %doc docs/cz80 docs/musa docs/mz80 docs/star
 
 %changelog
+* Sat Feb 04 2012 Andrea Musuruane <musuruan@gmail.com> 1.29-1
+- updated to new upstream version
+
 * Sun Dec 11 2011 Andrea Musuruane <musuruan@gmail.com> 1.28-1
 - updated to new upstream version
 - updated URL and Source tags
