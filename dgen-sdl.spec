@@ -65,6 +65,9 @@ rm -rf %{buildroot}
 * Sun Mar 11 2012 Andrea Musuruane <musuruan@gmail.com> 1.30-1
 - updated to new upstream version
 
+* Thu Mar 08 2012 Nicolas Chauvet <kwizart@gmail.com> - 1.29-2
+- Rebuilt for c++ ABI breakage
+
 * Sat Feb 04 2012 Andrea Musuruane <musuruan@gmail.com> 1.29-1
 - updated to new upstream version
 
