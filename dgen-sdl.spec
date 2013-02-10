@@ -1,7 +1,7 @@
 Summary: A Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
-Version: 1.31
-Release: 2%{?dist}
+Version: 1.32
+Release: 1%{?dist}
 License: BSD
 Group: Applications/Emulators
 URL: http://dgen.sourceforge.net/
@@ -22,7 +22,7 @@ compressed ROM images, and more.
 %setup -q
 
 # Fix file encoding
-for txtfile in cz80/readme.txt
+for txtfile in cz80/readme.txt star/stardoc.txt
 do
     iconv --from=ISO-8859-1 --to=UTF-8 $txtfile > tmp
     touch -r $txtfile tmp
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %doc docs/cz80 docs/musa docs/mz80 docs/star
 
 %changelog
+* Sun Feb 10 2013 Andrea Musuruane <musuruan@gmail.com> - 1.32-1
+- updated to new upstream version
+
 * Fri Feb 08 2013 Andrea Musuruane <musuruan@gmail.com> - 1.31-2
 - rebuilt due to libarchive soname bump
 
