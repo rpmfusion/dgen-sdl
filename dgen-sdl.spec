@@ -1,6 +1,6 @@
 Summary: A Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
-Version: 1.32
+Version: 1.33
 Release: 1%{?dist}
 License: BSD
 Group: Applications/Emulators
@@ -32,7 +32,7 @@ done
 %build
 %configure
 # It does not compile with smp_mflags
-make
+make V=1
 
 %install
 rm -rf %{buildroot}
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %doc docs/cz80 docs/musa docs/mz80 docs/star
 
 %changelog
+* Sun Jul 27 2014 Andrea Musuruane <musuruan@gmail.com> - 1.33-1
+- updated to new upstream version
+
 * Sun Feb 10 2013 Andrea Musuruane <musuruan@gmail.com> - 1.32-1
 - updated to new upstream version
 
@@ -98,7 +101,7 @@ rm -rf %{buildroot}
 - removed %%{?dist} tag from changelog
 - removed %%{?_smp_mflags} from make invocation
 
-* Sat Dec 01 2006 Andrea Musuruane <musuruan@gmail.com> 1.23-2
+* Fri Dec 01 2006 Andrea Musuruane <musuruan@gmail.com> 1.23-2
 - source tarball now matches upstreams
 - added MZ80 and Starscream docs
 
