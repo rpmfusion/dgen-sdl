@@ -1,12 +1,10 @@
 Summary: A Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
 Version: 1.33
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: BSD
-Group: Applications/Emulators
 URL: http://dgen.sourceforge.net/
 Source: http://downloads.sourceforge.net/dgen/%{name}-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: SDL-devel >= 1.0.0
 BuildRequires: libarchive-devel
 %ifarch %{ix86}
@@ -35,11 +33,20 @@ done
 make V=1
 
 %install
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
+
+# install docs
 mkdir docs
+mkdir docs/cyclone
+cp -a cyclone/Cyclone.txt docs/cyclone
 mkdir docs/cz80
 cp -a cz80/readme.txt docs/cz80
+mkdir docs/drz80
+cp -a drz80/DrZ80.txt docs/drz80
+mkdir docs/dz80
+cp -a dz80/FILE_ID.DIZ docs/dz80
+cp -a dz80/README.TXT docs/dz80
+cp -a dz80/whatsnew.txt docs/dz80
 mkdir docs/musa
 cp -a musa/readme.txt docs/musa
 cp -a musa/history.txt docs/musa
@@ -48,20 +55,25 @@ cp -a mz80/mz80.txt docs/mz80
 mkdir docs/star
 cp -a star/stardoc.txt docs/star
 
-%clean
-rm -rf %{buildroot}
+# remove not useful binary file
+rm -f %{_bindir}/cyclone
 
 %files
-%defattr(-,root,root)
 %{_bindir}/dgen
 %{_bindir}/dgen_tobin
 %{_mandir}/man1/dgen.1*
 %{_mandir}/man1/dgen_tobin.1*
 %{_mandir}/man5/dgenrc.5*
 %doc AUTHORS ChangeLog COPYING README sample.dgenrc
-%doc docs/cz80 docs/musa docs/mz80 docs/star
+%doc docs/cyclone docs/cz80 docs/drz80 docs/dz80 docs/musa docs/mz80 docs/star
 
 %changelog
+* Sat Aug 16 2014 Andrea Musuruane <musuruan@gmail.com> - 1.33-2
+- fixed building on arm
+- added missing cpu emulators docs
+- dropped obsolete Group, Buildroot, %%clean and %%defattr
+- dropped cleaning at the beginning of %%install
+
 * Sun Jul 27 2014 Andrea Musuruane <musuruan@gmail.com> - 1.33-1
 - updated to new upstream version
 
