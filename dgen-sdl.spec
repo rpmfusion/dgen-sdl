@@ -1,7 +1,7 @@
 Summary: A Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
 Version: 1.33
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: BSD
 URL: http://dgen.sourceforge.net/
 Source: http://downloads.sourceforge.net/dgen/%{name}-%{version}.tar.gz
@@ -56,7 +56,7 @@ mkdir docs/star
 cp -a star/stardoc.txt docs/star
 
 # remove not useful binary file
-rm -f %{_bindir}/cyclone
+rm -f %{buildroot}%{_bindir}/cyclone
 
 %files
 %{_bindir}/dgen
@@ -68,6 +68,9 @@ rm -f %{_bindir}/cyclone
 %doc docs/cyclone docs/cz80 docs/drz80 docs/dz80 docs/musa docs/mz80 docs/star
 
 %changelog
+* Sun Aug 17 2014 Andrea Musuruane <musuruan@gmail.com> - 1.33-3
+- fixed building on arm
+
 * Sat Aug 16 2014 Andrea Musuruane <musuruan@gmail.com> - 1.33-2
 - fixed building on arm
 - added missing cpu emulators docs
