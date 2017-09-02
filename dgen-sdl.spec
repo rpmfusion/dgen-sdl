@@ -1,7 +1,7 @@
 Summary: A Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
 Version: 1.33
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: BSD
 URL: http://dgen.sourceforge.net/
 Source: http://downloads.sourceforge.net/dgen/%{name}-%{version}.tar.gz
@@ -16,6 +16,7 @@ DGen/SDL is an emulator for the Sega Genesis/MegaDrive game console. It
 supports save states, full screen mode, interlace mode, Game Genie, joystick, 
 compressed ROM images, and more. 
 
+
 %prep
 %setup -q
 
@@ -27,13 +28,21 @@ do
     mv tmp $txtfile
 done
 
+# Fix build with nasm 2.13.01
+sed -i '/@NASM@/s/--//' \
+  Makefile.in \
+  mz80/Makefile.in \
+  star/Makefile.in
+
+
 %build
 %configure
 # It does not compile with smp_mflags
 make V=1
 
+
 %install
-make install DESTDIR=%{buildroot}
+%make_install
 
 # install docs
 mkdir docs
@@ -58,16 +67,22 @@ cp -a star/stardoc.txt docs/star
 # remove not useful binary file
 rm -f %{buildroot}%{_bindir}/cyclone
 
+
 %files
 %{_bindir}/dgen
 %{_bindir}/dgen_tobin
 %{_mandir}/man1/dgen.1*
 %{_mandir}/man1/dgen_tobin.1*
 %{_mandir}/man5/dgenrc.5*
-%doc AUTHORS ChangeLog COPYING README sample.dgenrc
+%license COPYING
+%doc AUTHORS ChangeLog README sample.dgenrc
 %doc docs/cyclone docs/cz80 docs/drz80 docs/dz80 docs/musa docs/mz80 docs/star
 
+
 %changelog
+* Sat Sep 02 2017 Andrea Musuruane <musuruan@gmail.com> - 1.33-5
+- fixed build with nasm 2.13.01
+
 * Thu Aug 31 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 1.33-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
