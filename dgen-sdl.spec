@@ -7,6 +7,7 @@ URL: http://dgen.sourceforge.net/
 Source: http://downloads.sourceforge.net/dgen/%{name}-%{version}.tar.gz
 BuildRequires: SDL-devel >= 1.0.0
 BuildRequires: libarchive-devel
+BuildRequires: gcc-c++
 %ifarch %{ix86}
 BuildRequires: nasm
 %endif
