@@ -1,7 +1,7 @@
 Summary: A Sega Genesis (MegaDrive outside the US) emulator
 Name: dgen-sdl 
 Version: 1.33
-Release: 14%{?dist}
+Release: 15%{?dist}
 License: BSD
 URL: http://dgen.sourceforge.net/
 Source: http://downloads.sourceforge.net/dgen/%{name}-%{version}.tar.gz
@@ -81,6 +81,9 @@ rm -f %{buildroot}%{_bindir}/cyclone
 
 
 %changelog
+* Thu Feb 10 2022 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 1.33-15
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
 * Wed Aug 04 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 1.33-14
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
